@@ -1,0 +1,58 @@
+Flappy Bird -klooni (HTML Canvas API)
+
+Tavoite:
+Rakentaa selainpeli, joka jäljittelee klassista Flappy Birdiä käyttäen HTML Canvas APIa ja JavaScriptiä. Pelissä on yksinkertainen fysiikka, pisteytys, tilakone sekä high score -tallennus localStorageen.
+
+Keskeiset ominaisuudet:
+
+Lintu, joka liikkuu painovoiman vaikutuksesta ja saa ylöspäin impulssin käyttäjän syötteestä
+
+Satunnaistetut putkiparit esteiksi
+
+Pisteytys putkien ohittamisesta
+
+Törmäysten tarkistus (putket, maa, yläraja)
+
+Tilakone: MENU → READY → PLAYING → GAME OVER
+
+HUD, high score -tallennus ja yksinkertainen UI (Start, Restart, Mute)
+
+Responsiivisuus ja mobiilituki
+
+Tekniikat:
+
+HTML, CSS, JavaScript (ES Modules)
+
+requestAnimationFrame -pelisilmukka
+
+localStorage (high score ja asetukset)
+
+Sprite sheet -grafiikat ja parallax-tausta
+
+Audio-efektit (flap, point, hit, die)
+
+Aikataulu:
+
+Päivä 1: Projektin alustus ja pelisilmukka
+
+Päivä 2: Lintufysiikka ja syötteet
+
+Päivä 3: Putket ja törmäykset
+
+Päivä 4: Pisteytys ja tilakone
+
+Päivä 5: Grafiikat ja äänet
+
+Päivä 6: Tallennus ja asetukset
+
+Päivä 7: Testaus, optimointi ja julkaisu
+
+Laajennusideat:
+
+Vaihtuvat teemat (päivä/yö)
+
+Erilaisia putkityyppejä
+
+Online-ennätyslista
+
+PWA-asennustuki
