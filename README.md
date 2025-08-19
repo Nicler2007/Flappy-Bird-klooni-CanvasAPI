@@ -69,5 +69,5 @@ Pelin tavoitteena on ohjata lintua väistämään putkipareja ja kerätä mahdol
 
 ---
 
-✍️ Tekijä: *[Sinun nimesi]*  
+✍️ Tekijä: *[Nico Hede]*  
 📜 Lisenssi: MIT
