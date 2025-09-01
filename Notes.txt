@@ -1,3 +1,126 @@
+
+
+🎮 Mekaniikka
+
+Otsikko: [Mekaniikka] Toteuta pelilooppi
+Kuvaus: Lisää requestAnimationFrame-pohjainen pelilooppi ja ajan laskenta.
+
+Otsikko: [Mekaniikka] Linnun fysiikka
+Kuvaus: Toteuta painovoima, flap-impulssi ja nopeuden rajoitus linnulle.
+
+Otsikko: [Mekaniikka] Putkien generaattori
+Kuvaus: Luo putkipareja satunnaisilla väleillä.
+
+Otsikko: [Mekaniikka] Putkien kierrätys
+Kuvaus: Toteuta object pool putkien hallintaan.
+
+Otsikko: [Mekaniikka] Törmäystarkistus
+Kuvaus: Lintu vs. putki/maa + reunaehdot (circle–AABB).
+
+Otsikko: [Mekaniikka] Tilakone
+Kuvaus: MENU → READY → PLAYING → GAME_OVER.
+
+Otsikko: [Mekaniikka] Pisteytys ja high score
+Kuvaus: Piste +1 putken ohituksesta, high score tallennus.
+
+🎨 Grafiikka
+
+Otsikko: [Grafiikka] Sprite sheet
+Kuvaus: Lintu (3 framea), putki, maa, pilvet.
+
+Otsikko: [Grafiikka] Parallax-tausta
+Kuvaus: Useampi kerros eri nopeuksilla.
+
+Otsikko: [Grafiikka] Tekstit
+Kuvaus: Tekstien piirto + varjostus/halo luettavuuteen.
+
+Otsikko: [Grafiikka] Skaalaus
+Kuvaus: 360x640 → devicePixelRatio.
+
+Otsikko: [Grafiikka] PWA/manifest
+Kuvaus: Perus offline/ikonit (valinnainen).
+
+🔊 Äänet
+
+Otsikko: [Äänet] Lisää SFX
+Kuvaus: flap, point, hit, die.
+
+Otsikko: [Äänet] Äänien toteutus
+Kuvaus: HTMLAudio/WebAudio.
+
+Otsikko: [Äänet] Äänien esilataus
+Kuvaus: Lataa ennen PLAYING-tilaa.
+
+Otsikko: [Äänet] Äänenvoimakkuus
+Kuvaus: Toteuta säädöt.
+
+Otsikko: [Äänet] Mute-toggle
+Kuvaus: Toteuta mute + tallennus.
+
+🖥 Käyttöliittymä
+
+Otsikko: [UI] MENU-näkymä
+Kuvaus: Start, Mute, ohjeteksti.
+
+Otsikko: [UI] READY-näkymä
+Kuvaus: “Valmis?” + vilkkuva vihje.
+
+Otsikko: [UI] HUD
+Kuvaus: pisteet yläreunaan, high score alareunaan.
+
+Otsikko: [UI] GAME_OVER-näkymä
+Kuvaus: tulos, high score, Restart-nappi.
+
+Otsikko: [UI] Esteettömyys
+Kuvaus: kontrastit, näppäimistötuki, prefers-reduced-motion.
+
+💾 Tallennus ja asetukset
+
+Otsikko: [Tallennus] localStorage-avaimet
+Kuvaus: FB_HIGHSCORE, FB_IS_MUTED, FB_SETTINGS.
+
+Otsikko: [Tallennus] Reset-toiminto
+Kuvaus: Nollaa high score valikosta.
+
+Otsikko: [Tallennus] Skeema-versio
+Kuvaus: Versioavain tuleviin muutoksiin.
+
+🧪 Testaus ja suorituskyky
+
+Otsikko: [Testaus] Yksikkötestit
+Kuvaus: putkien väli, pisteytys, törmäys.
+
+Otsikko: [Testaus] Manuaalitestaus
+Kuvaus: DPI/resoluutio + mobiili.
+
+Otsikko: [Testaus] Suorituskykytestaus
+Kuvaus: FPS, GC-piikit.
+
+Otsikko: [Testaus] Optimoinnit
+Kuvaus: sprite atlas, offscreenCanvas, drawImage-kutsujen minimointi.
+
+🚀 Julkaisu
+
+Otsikko: [Julkaisu] Repo ja kansiorakenne
+Kuvaus: Luo repositorio ja pohja.
+
+Otsikko: [Julkaisu] Dev-serveri
+Kuvaus: Käytä esim. Vite.
+
+Otsikko: [Julkaisu] GitHub Pages / Netlify
+Kuvaus: Julkaise peli.
+
+Otsikko: [Julkaisu] Semver ja changelog
+Kuvaus: v0.1 MVP, v1.0 stable.
+
+
+
+
+
+
+
+
+
 Flappy Bird -klooni (HTML Canvas API)
 
 Tavoite:

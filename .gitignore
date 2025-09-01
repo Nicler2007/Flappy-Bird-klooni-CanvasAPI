@@ -1,0 +1,14 @@
+# Editorin väliaikaistiedostot
+*.swp
+*.swo
+
+# Käyttöjärjestelmän roskat
+.DS_Store
+Thumbs.db
+
+# Lokit
+*.log
+
+# Yksityiset asetukset
+.env
+.env.*
