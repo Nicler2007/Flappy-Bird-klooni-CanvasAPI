@@ -76,4 +76,7 @@ The goal of the game is to guide the bird through pipe pairs and collect as many
 ---
 
 ✍️ Authors: [Nico Hede, Jani Piiroinen]
+
+📜 License: MIT
+=======
 📜 License: MIT
