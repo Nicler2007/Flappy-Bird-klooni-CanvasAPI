@@ -1,73 +1,94 @@
-# 🐦 Flappy Bird -klooni (HTML Canvas API)
+# 🐦 Flappy Bird Clone (HTML Canvas API)
 
-Flappy Bird -tyylinen selainpeli, joka on toteutettu **HTML Canvas APIlla ja JavaScriptillä**.  
-Pelin tavoitteena on ohjata lintua väistämään putkipareja ja kerätä mahdollisimman paljon pisteitä.  
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)  
+![Made with JavaScript](https://img.shields.io/badge/Made%20with-JavaScript-blue)  
+![Canvas API](https://img.shields.io/badge/Canvas-API-green)  
 
-## 🎮 Ominaisuudet
-- Klassinen Flappy Bird -pelimekaniikka  
-- Satunnaisesti generoidut putket  
-- Pisteytys + high score tallennus `localStorageen`  
-- Tilakone: **MENU → READY → PLAYING → GAME OVER**  
-- Responsiivinen (toimii myös mobiilissa)  
-- Ääniefektit (flap, point, hit, die)  
-- Kevyt ja modulaarinen koodirakenne  
-
-## 🛠️ Teknologiat
-- **HTML5 Canvas API** – piirtämiseen ja animaatioon  
-- **JavaScript (ES Modules)** – pelilogiikka ja syötteet  
-- **CSS3** – yksinkertainen käyttöliittymä ja tyylit  
-- **localStorage** – ennätyksen tallennus  
-
-## 📂 Projektin rakenne
-```
-/project-root
-│── index.html
-│── style.css
-│── /assets        # kuvat, äänet, sprite sheet
-│── /js
-│   ├── main.js    # käynnistys, pelisilmukka
-│   ├── game.js    # maailman tila
-│   ├── bird.js    # linnun fysiikka ja animaatio
-│   ├── pipes.js   # putkien generointi ja kierrätys
-│   ├── background.js
-│   ├── ui.js      # HUD ja valikot
-│   ├── audio.js   # äänet
-│   └── storage.js # localStorage helperit
-```
-
-## 🚀 Käynnistys
-1. Kloonaa repositorio  
-   ```bash
-   git clone https://github.com/<käyttäjänimi>/flappy-bird-clone.git
-   cd flappy-bird-clone
-   ```
-2. Avaa `index.html` selaimessa  
-   *tai* käynnistä dev-palvelin (esim. Vite):  
-   ```bash
-   npm install -g vite
-   vite
-   ```
-
-## 🎯 Kontrollit
-- **Space / Hiiren klikkaus / Kosketus** → Lintu hyppää  
-- **M** → Mute päälle/pois  
-
-## 📅 Kehitysaikataulu (arvio)
-- Päivä 1: Alustus ja pelisilmukka  
-- Päivä 2: Lintu ja syötteet  
-- Päivä 3: Putket ja törmäykset  
-- Päivä 4: Pisteytys ja tilakone  
-- Päivä 5: Grafiikat ja äänet  
-- Päivä 6: Tallennus ja asetukset  
-- Päivä 7: Testaus ja julkaisu  
-
-## 🌟 Tulevaisuuden ideat
-- Päivä/yö-teema  
-- Erikoisputkia ja haasteita  
-- Online-scoreboard  
-- PWA-tuki (offline ja asennettavuus)  
+A Flappy Bird–style browser game built with **HTML Canvas API and JavaScript**.  
+The goal of the game is to guide the bird through pipe pairs and collect as many points as possible.  
 
 ---
 
-✍️ Tekijä: *[Nico Hede]*  
-📜 Lisenssi: MIT
+## 🎮 Features
+- Classic Flappy Bird mechanics  
+- Randomly generated pipes  
+- Scoring + high score saved to `localStorage`  
+- State machine: **MENU → READY → PLAYING → GAME OVER**  
+- Responsive (works on mobile as well)  
+- Sound effects (flap, point, hit, die)  
+- Lightweight and modular code structure  
+
+---
+
+## 🛠️ Technologies
+- **HTML5 Canvas API** – for rendering and animation  
+- **JavaScript (ES Modules)** – game logic and input handling  
+- **CSS3** – simple UI and styling  
+- **localStorage** – save high score  
+
+---
+
+## 📂 Project Structure
+```text
+/project-root
+│── index.html
+│── style.css
+│── /assets        # images, sounds, sprite sheet
+│── /js
+│   ├── main.js    # initialization, game loop
+│   ├── game.js    # world state
+│   ├── bird.js    # bird physics and animation
+│   ├── pipes.js   # pipe generation and recycling
+│   ├── background.js
+│   ├── ui.js      # HUD and menus
+│   ├── audio.js   # sounds
+│   └── storage.js # localStorage helpers
+
+🚀 Getting Started
+Clone and run
+bash
+Kopioi koodi
+git clone https://github.com/<username>/flappy-bird-clone.git
+cd flappy-bird-clone
+Run in browser
+Open index.html in your browser
+
+Or run with dev server (Vite example)
+bash
+Kopioi koodi
+npm install -g vite
+vite
+🎯 Controls
+Space / Mouse click / Touch → Bird jumps
+
+M → Toggle mute
+
+📅 Development Schedule (estimated)
+Day 1: Setup and game loop
+
+Day 2: Bird and inputs
+
+Day 3: Pipes and collisions
+
+Day 4: Scoring and state machine
+
+Day 5: Graphics and sounds
+
+Day 6: Storage and settings
+
+Day 7: Testing and release
+
+🌟 Future Ideas
+Day/night theme
+
+Special pipes and challenges
+
+Online scoreboard
+
+PWA support (offline and installable)
+
+✍️ Author
+Nico Hede
+
+📜 License
+This project is licensed under the MIT License.
