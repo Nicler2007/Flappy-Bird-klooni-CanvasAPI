@@ -1,181 +1,171 @@
+🎮 Mechanics
 
+Title: [Mechanics] Implement game loop
+Description: Add a requestAnimationFrame-based game loop and time tracking.
 
-🎮 Mekaniikka
+Title: [Mechanics] Bird physics
+Description: Implement gravity, flap impulse, and velocity clamping for the bird.
 
-Otsikko: [Mekaniikka] Toteuta pelilooppi
-Kuvaus: Lisää requestAnimationFrame-pohjainen pelilooppi ja ajan laskenta.
+Title: [Mechanics] Pipe generator
+Description: Create pipe pairs with randomized gaps.
 
-Otsikko: [Mekaniikka] Linnun fysiikka
-Kuvaus: Toteuta painovoima, flap-impulssi ja nopeuden rajoitus linnulle.
+Title: [Mechanics] Pipe recycling
+Description: Implement an object pool for managing pipes.
 
-Otsikko: [Mekaniikka] Putkien generaattori
-Kuvaus: Luo putkipareja satunnaisilla väleillä.
+Title: [Mechanics] Collision detection
+Description: Bird vs. pipe/ground + boundary checks (circle–AABB).
 
-Otsikko: [Mekaniikka] Putkien kierrätys
-Kuvaus: Toteuta object pool putkien hallintaan.
+Title: [Mechanics] State machine
+Description: MENU → READY → PLAYING → GAME_OVER.
 
-Otsikko: [Mekaniikka] Törmäystarkistus
-Kuvaus: Lintu vs. putki/maa + reunaehdot (circle–AABB).
+Title: [Mechanics] Scoring and high score
+Description: +1 point per pipe passed, save high score.
 
-Otsikko: [Mekaniikka] Tilakone
-Kuvaus: MENU → READY → PLAYING → GAME_OVER.
+🎨 Graphics
 
-Otsikko: [Mekaniikka] Pisteytys ja high score
-Kuvaus: Piste +1 putken ohituksesta, high score tallennus.
+Title: [Graphics] Sprite sheet
+Description: Bird (3 frames), pipe, ground, clouds.
 
-🎨 Grafiikka
+Title: [Graphics] Parallax background
+Description: Multiple layers moving at different speeds.
 
-Otsikko: [Grafiikka] Sprite sheet
-Kuvaus: Lintu (3 framea), putki, maa, pilvet.
+Title: [Graphics] Texts
+Description: Draw text with shadow/halo for readability.
 
-Otsikko: [Grafiikka] Parallax-tausta
-Kuvaus: Useampi kerros eri nopeuksilla.
+Title: [Graphics] Scaling
+Description: 360x640 → devicePixelRatio.
 
-Otsikko: [Grafiikka] Tekstit
-Kuvaus: Tekstien piirto + varjostus/halo luettavuuteen.
+Title: [Graphics] PWA/manifest
+Description: Basic offline/icons (optional).
 
-Otsikko: [Grafiikka] Skaalaus
-Kuvaus: 360x640 → devicePixelRatio.
+🔊 Sounds
 
-Otsikko: [Grafiikka] PWA/manifest
-Kuvaus: Perus offline/ikonit (valinnainen).
+Title: [Sounds] Add SFX
+Description: flap, point, hit, die.
 
-🔊 Äänet
+Title: [Sounds] Sound implementation
+Description: HTMLAudio/WebAudio.
 
-Otsikko: [Äänet] Lisää SFX
-Kuvaus: flap, point, hit, die.
+Title: [Sounds] Preload sounds
+Description: Load before entering PLAYING state.
 
-Otsikko: [Äänet] Äänien toteutus
-Kuvaus: HTMLAudio/WebAudio.
+Title: [Sounds] Volume control
+Description: Implement volume adjustments.
 
-Otsikko: [Äänet] Äänien esilataus
-Kuvaus: Lataa ennen PLAYING-tilaa.
+Title: [Sounds] Mute toggle
+Description: Implement mute + persistence.
 
-Otsikko: [Äänet] Äänenvoimakkuus
-Kuvaus: Toteuta säädöt.
+🖥 User Interface
 
-Otsikko: [Äänet] Mute-toggle
-Kuvaus: Toteuta mute + tallennus.
+Title: [UI] MENU view
+Description: Start, Mute, help text.
 
-🖥 Käyttöliittymä
+Title: [UI] READY view
+Description: “Ready?” + blinking hint.
 
-Otsikko: [UI] MENU-näkymä
-Kuvaus: Start, Mute, ohjeteksti.
+Title: [UI] HUD
+Description: score at the top, high score at the bottom.
 
-Otsikko: [UI] READY-näkymä
-Kuvaus: “Valmis?” + vilkkuva vihje.
+Title: [UI] GAME_OVER view
+Description: result, high score, Restart button.
 
-Otsikko: [UI] HUD
-Kuvaus: pisteet yläreunaan, high score alareunaan.
+Title: [UI] Accessibility
+Description: contrasts, keyboard support, prefers-reduced-motion.
 
-Otsikko: [UI] GAME_OVER-näkymä
-Kuvaus: tulos, high score, Restart-nappi.
+💾 Storage and settings
 
-Otsikko: [UI] Esteettömyys
-Kuvaus: kontrastit, näppäimistötuki, prefers-reduced-motion.
+Title: [Storage] localStorage keys
+Description: FB_HIGHSCORE, FB_IS_MUTED, FB_SETTINGS.
 
-💾 Tallennus ja asetukset
+Title: [Storage] Reset function
+Description: Reset high score from menu.
 
-Otsikko: [Tallennus] localStorage-avaimet
-Kuvaus: FB_HIGHSCORE, FB_IS_MUTED, FB_SETTINGS.
+Title: [Storage] Schema version
+Description: Version key for future changes.
 
-Otsikko: [Tallennus] Reset-toiminto
-Kuvaus: Nollaa high score valikosta.
+🧪 Testing and performance
 
-Otsikko: [Tallennus] Skeema-versio
-Kuvaus: Versioavain tuleviin muutoksiin.
+Title: [Testing] Unit tests
+Description: pipe gap, scoring, collisions.
 
-🧪 Testaus ja suorituskyky
+Title: [Testing] Manual testing
+Description: DPI/resolution + mobile.
 
-Otsikko: [Testaus] Yksikkötestit
-Kuvaus: putkien väli, pisteytys, törmäys.
+Title: [Testing] Performance testing
+Description: FPS, GC spikes.
 
-Otsikko: [Testaus] Manuaalitestaus
-Kuvaus: DPI/resoluutio + mobiili.
+Title: [Testing] Optimizations
+Description: sprite atlas, offscreenCanvas, minimize drawImage calls.
 
-Otsikko: [Testaus] Suorituskykytestaus
-Kuvaus: FPS, GC-piikit.
+🚀 Release
 
-Otsikko: [Testaus] Optimoinnit
-Kuvaus: sprite atlas, offscreenCanvas, drawImage-kutsujen minimointi.
+Title: [Release] Repo and folder structure
+Description: Create repository and base setup.
 
-🚀 Julkaisu
+Title: [Release] Dev server
+Description: Use e.g. Vite.
 
-Otsikko: [Julkaisu] Repo ja kansiorakenne
-Kuvaus: Luo repositorio ja pohja.
+Title: [Release] GitHub Pages / Netlify
+Description: Deploy the game.
 
-Otsikko: [Julkaisu] Dev-serveri
-Kuvaus: Käytä esim. Vite.
+Title: [Release] Semver and changelog
+Description: v0.1 MVP, v1.0 stable.
 
-Otsikko: [Julkaisu] GitHub Pages / Netlify
-Kuvaus: Julkaise peli.
+Flappy Bird Clone (HTML Canvas API)
 
-Otsikko: [Julkaisu] Semver ja changelog
-Kuvaus: v0.1 MVP, v1.0 stable.
+Goal:
+Build a browser game that replicates the classic Flappy Bird using the HTML Canvas API and JavaScript. The game will feature simple physics, scoring, a state machine, and high score saving via localStorage.
 
+Key Features:
 
+Bird affected by gravity, with upward impulse on user input
 
+Randomized pipe pairs as obstacles
 
+Scoring based on passing pipes
 
+Collision detection (pipes, ground, ceiling)
 
+State machine: MENU → READY → PLAYING → GAME OVER
 
+HUD, high score saving, simple UI (Start, Restart, Mute)
 
+Responsive and mobile-friendly
 
-Flappy Bird -klooni (HTML Canvas API)
-
-Tavoite:
-Rakentaa selainpeli, joka jäljittelee klassista Flappy Birdiä käyttäen HTML Canvas APIa ja JavaScriptiä. Pelissä on yksinkertainen fysiikka, pisteytys, tilakone sekä high score -tallennus localStorageen.
-
-Keskeiset ominaisuudet:
-
-Lintu, joka liikkuu painovoiman vaikutuksesta ja saa ylöspäin impulssin käyttäjän syötteestä
-
-Satunnaistetut putkiparit esteiksi
-
-Pisteytys putkien ohittamisesta
-
-Törmäysten tarkistus (putket, maa, yläraja)
-
-Tilakone: MENU → READY → PLAYING → GAME OVER
-
-HUD, high score -tallennus ja yksinkertainen UI (Start, Restart, Mute)
-
-Responsiivisuus ja mobiilituki
-
-Tekniikat:
+Technologies:
 
 HTML, CSS, JavaScript (ES Modules)
 
-requestAnimationFrame -pelisilmukka
+requestAnimationFrame game loop
 
-localStorage (high score ja asetukset)
+localStorage (high score and settings)
 
-Sprite sheet -grafiikat ja parallax-tausta
+Sprite sheet graphics and parallax background
 
-Audio-efektit (flap, point, hit, die)
+Audio effects (flap, point, hit, die)
 
-Aikataulu:
+Schedule:
 
-Päivä 1: Projektin alustus ja pelisilmukka
+Day 1: Project setup and game loop
 
-Päivä 2: Lintufysiikka ja syötteet
+Day 2: Bird physics and input handling
 
-Päivä 3: Putket ja törmäykset
+Day 3: Pipes and collisions
 
-Päivä 4: Pisteytys ja tilakone
+Day 4: Scoring and state machine
 
-Päivä 5: Grafiikat ja äänet
+Day 5: Graphics and sounds
 
-Päivä 6: Tallennus ja asetukset
+Day 6: Storage and settings
 
-Päivä 7: Testaus, optimointi ja julkaisu
+Day 7: Testing, optimization, and release
 
-Laajennusideat:
+Extension Ideas:
 
-Vaihtuvat teemat (päivä/yö)
+Theme variations (day/night)
 
-Erilaisia putkityyppejä
+Different pipe types
 
-Online-ennätyslista
+Online leaderboard
 
-PWA-asennustuki
+PWA installation support
