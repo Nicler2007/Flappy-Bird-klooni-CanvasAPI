@@ -1,9 +1,10 @@
-// game.js — game loop, states, and pipes
+// game.js — game loop, states, and pipes (uses user's Pipes mechanics)
 import { UI } from './ui.js';
 import { Bird } from './bird.js';
 import { drawBackground } from './background.js';
 import { getHighScore, setHighScore } from './storage.js';
 import { play } from './audio.js';
+import { Pipes } from './pipes.js';
 
 export class Game {
   constructor(){
@@ -12,33 +13,66 @@ export class Game {
     this.w = this.canvas.width;
     this.h = this.canvas.height;
 
-    this.state = 'menu'; // menu -> ready -> playing -> over
-    this.score = 0; this.highScore = getHighScore();
-    this.time = 0;
+    this.state = 'ready';     // ready -> playing -> over
+    this.time  = 0;
+    this.last  = performance.now();
 
-    this.bird = new Bird(this.w*0.3, this.h*0.5);
-    this.last = performance.now();
+    // Maa-viiva 85%:ssa kuten aiemmin
+    this.groundY = Math.floor(this.h * 0.85);
 
-    this.pipeGap = 160;
-    this.pipeSpeed = 220;   // px/s
-    this.pipes = [];        // {x, topH, scored}
-    this.spawnEvery = 1.4;  // s
-    this.spawnTimer = 0;
+    // Lintu ja putket
+    this.bird  = new Bird(this.w*0.3, this.h*0.5);
+    this.pipes = new Pipes(this.w, this.groundY);
 
-    // UI events
+    // Pipes tarvitsee skoren "store"-objektiin
+    this.store = {
+      score: 0,
+      best: getHighScore() || 0
+    };
+    this.prevScore = 0;
+
+    // UI
+    UI.setScore(0);
+    UI.hideOverlays(); // ei start-paneelia
+
+    // Resizing
     window.addEventListener('ui:resize', (e)=>{
-      this.w = e.detail.width; this.h = e.detail.height;
+      this.w = e.detail.width; 
+      this.h = e.detail.height;
+      this.groundY = Math.floor(this.h * 0.85);
+      this.pipes.canvasW = this.w;
+      this.pipes.canvasH = this.groundY;
     });
-    window.addEventListener('ui:menuStart', ()=>{ this.toReady(); });
-    window.addEventListener('ui:readyConfirm', ()=>{ this.start(); });
-    window.addEventListener('ui:restart', ()=>{ this.toReady(); });
-    window.addEventListener('ui:flap', ()=>{ if(this.state==='playing'){ this.bird.flap(); play('flap'); }});
 
-    // mouse/keyboard
-    window.addEventListener('pointerdown', ()=>{ if(this.state==='playing'){ this.bird.flap(); play('flap'); }});
+    // Syötteet: peli käyntiin ja hyppy
+    const flapOrStart = ()=>{
+      if (this.state === 'ready') {
+        this.start();           // aloita peli
+        this.bird.flap();       // tuntuma: ekasta painalluksesta hyppy
+        play('flap');
+      } else if (this.state === 'playing') {
+        this.bird.flap();
+        play('flap');
+      } else if (this.state === 'over') {
+        this.toReady();         // reset
+        this.start();           // ja heti käyntiin
+        this.bird.flap();
+        play('flap');
+      }
+    };
+
+    // Hiiren oikea sallitaan, estetään contextmenu
+    this.canvas.addEventListener('contextmenu', (e)=>e.preventDefault());
+    window.addEventListener('pointerdown', (e)=>{
+      if (e.button === 2 /* right */) { flapOrStart(); }
+      // Jos haluat sallia myös vasemman, poista seuraava kommentti:
+      // if (e.button === 0) { flapOrStart(); }
+    });
+
+    // Välilyönti
     window.addEventListener('keydown', (e)=>{
       if (e.code === 'Space') {
-        if (this.state==='playing'){ this.bird.flap(); play('flap'); }
+        flapOrStart();
         e.preventDefault();
       }
     });
@@ -48,66 +82,63 @@ export class Game {
 
   toReady(){
     this.state = 'ready';
-    this.score = 0;
+    this.store.score = 0;
+    this.store.best  = getHighScore() || 0;
+    this.prevScore   = 0;
+
     this.bird = new Bird(this.w*0.3, this.h*0.5);
-    this.pipes = [];
-    this.spawnTimer = 0;
+
+    this.pipes.reset();
+    this.pipes.canvasW = this.w;
+    this.pipes.canvasH = this.groundY;
+
     UI.setScore(0);
-    UI.showReady();
+    // ei overlayta
   }
 
   start(){
     this.state = 'playing';
-    UI.hideOverlays();
   }
 
   gameOver(){
     this.state = 'over';
-    this.highScore = setHighScore(this.score);
-    UI.showGameOver({ score: this.score, highScore: this.highScore });
+    // Sync paras tulos storageen
+    const best = Math.max(this.store.best, getHighScore()||0);
+    setHighScore(best);
     play('hit');
-  }
-
-  spawnPipe(){
-    const minTop = 60;
-    const maxTop = this.h - this.pipeGap - 160;
-    const topH = Math.max(minTop, Math.min(maxTop, Math.random()*maxTop));
-    this.pipes.push({ x: this.w + 40, topH, scored:false });
+    // Ei overlayta; odotetaan uutta painallusta
   }
 
   update(dt){
     if (this.state !== 'playing') return;
 
-    this.spawnTimer += dt;
-    if (this.spawnTimer >= this.spawnEvery){
-      this.spawnTimer = 0; this.spawnPipe();
+    // Spawn-logiikka Pipesin omalla ajastimella (frame-pohjainen)
+    this.pipes.spawnTimer += dt * 60;
+    if (this.pipes.spawnTimer >= this.pipes.spawnInterval){
+      this.pipes.spawn();
+      this.pipes.spawnTimer = 0;
     }
 
-    for (const p of this.pipes) p.x -= this.pipeSpeed * dt;
-    this.pipes = this.pipes.filter(p => p.x > -120);
-
+    // Lintu
     this.bird.update(dt);
 
-    // ground/ceiling
-    const b = this.bird.getBounds();
-    if (b.y + b.r > this.h*0.85 || b.y - b.r < 0) return this.gameOver();
+    // Putket (sis. pisteytyksen storeen)
+    this.pipes.updateAndCull(this.bird, this.store);
 
-    // pipe collisions + points
-    for (const p of this.pipes){
-      const pipeW = 80;
-      const gapY1 = p.topH;
-      const gapY2 = p.topH + this.pipeGap;
-      const withinX = (b.x + b.r > p.x) && (b.x - b.r < p.x + pipeW);
-      const hitTop = withinX && (b.y - b.r < gapY1);
-      const hitBot = withinX && (b.y + b.r > gapY2);
-      if (hitTop || hitBot) return this.gameOver();
+    // UI & highscore
+    if (this.store.score !== this.prevScore){
+      UI.setScore(this.store.score);
+      play('point');
+      this.prevScore = this.store.score;
+    }
+    if (this.store.best > (getHighScore() || 0)){
+      setHighScore(this.store.best);
+    }
 
-      if (!p.scored && p.x + pipeW < b.x - b.r){
-        p.scored = true;
-        this.score++;
-        UI.setScore(this.score);
-        play('point');
-      }
+    // Törmäys
+    if (this.pipes.checkCollision(this.bird, this.groundY)){
+      this.gameOver();
+      return;
     }
   }
 
@@ -115,16 +146,15 @@ export class Game {
     const ctx = this.ctx, w = this.w, h = this.h;
     drawBackground(ctx, w, h);
 
-    // pipes
-    ctx.fillStyle = '#2ecc71';
-    for (const p of this.pipes){
-      const pipeW = 80;
-      ctx.fillRect(p.x, 0, pipeW, p.topH);
-      ctx.fillRect(p.x, p.topH + this.pipeGap, pipeW, h*0.85 - (p.topH + this.pipeGap));
-    }
+    // Pipes
+    this.pipes.draw(ctx);
 
-    // bird
+    // Bird
     this.bird.draw(ctx);
+
+    // Maa (jos tausta ei tee)
+    ctx.fillStyle = '#7cfc00';
+    ctx.fillRect(0, this.groundY, w, h - this.groundY);
   }
 
   loop(now){
@@ -141,6 +171,6 @@ export class Game {
 
 export function initGame(){
   const g = new Game();
-  g.toReady();
+  g.toReady(); // ei overlayta; odottaa ensimmäistä painallusta
   return g;
 }
