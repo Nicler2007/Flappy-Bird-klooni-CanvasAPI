@@ -1,71 +1,19 @@
-<!doctype html>
-<html lang="fi">
+<!DOCTYPE html>
+<html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <title>Flappy Clone</title>
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Flappy Bird Clone CanvasAPI</title>
+  <style>
+    canvas {
+      display: block;
+      margin: 0 auto;
+      background-color: #87ceeb;
+    }
+  </style>
 </head>
 <body>
-  <!-- Parallax-tausta -->
-  <div class="bg">
-    <div class="bg-layer bg-sky"></div>
-    <div class="bg-layer bg-clouds"></div>
-    <div class="bg-layer bg-hills"></div>
-  </div>
-
-  <!-- Päänäkymä -->
-  <main class="wrap">
-    <!-- Top bar / HUD -->
-    <header class="hud">
-      <div class="hud-left">
-        <button id="btnMenu" class="btn btn-ghost" title="Menu">☰</button>
-      </div>
-      <div class="hud-center">
-        <div class="score">
-          <span>Pisteet</span>
-          <strong id="score">0</strong>
-        </div>
-      </div>
-      <div class="hud-right">
-        <button id="btnHelp" class="btn btn-ghost" title="Ohje">?</button>
-        <button id="btnMute" class="btn" aria-pressed="false" title="Äänet">🔊 Sound</button>
-      </div>
-    </header>
-
-    <!-- Canvas-kehys -->
-    <section class="stage">
-      <canvas id="game"></canvas>
-      <button id="touchFlap" class="touch-flap" aria-label="Flap"></button>
-    </section>
-
-    <!-- Overlayt -->
-    <section id="panelReady" hidden class="panel">
-      <h1>Flappy Clone</h1>
-      <p>Space / hiiren oikea = läpytys</p>
-      <div class="panel-actions">
-        <button id="btnStart" class="btn btn-primary">Aloita</button>
-        <button id="btnReady" class="btn">Valmis</button>
-      </div>
-    </section>
-
-    <section id="panelGameOver" hidden class="panel">
-      <h2>Game Over</h2>
-      <div class="stats">
-        <div><span>Lopullinen:</span> <strong id="finalScore">0</strong></div>
-        <div><span>Ennätys:</span> <strong id="highScore">0</strong></div>
-      </div>
-      <div class="panel-actions">
-        <button id="btnRestart" class="btn btn-primary">Uudestaan</button>
-        <button id="btnMenu" class="btn">Valikkoon</button>
-      </div>
-    </section>
-  </main>
-
-  <!-- Moduulit (järjestys: UI -> peli) -->
-  <script type="module" src="./ui.js"></script>
-  <script type="module" src="./game.js"></script>
+  <canvas id="gameCanvas"></canvas>
+  <script type="module" src="./js/main.js"></script>
 </body>
 </html>
