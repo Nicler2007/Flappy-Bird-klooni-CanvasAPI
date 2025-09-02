@@ -1,19 +1,73 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Flappy Bird Clone CanvasAPI</title>
-  <style>
-    canvas {
-      display: block;
-      margin: 0 auto;
-      background-color: #87ceeb;
-    }
-  </style>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Flappy Clone • Canvas API</title>
+  <meta name="description" content="HTML Canvas game (Flappy Bird clone)">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Crect width='256' height='256' rx='56' fill='%2300c2ff'/%3E%3Cpath d='M66 160c12 14 38 22 62 22 42 0 76-22 76-50s-34-50-76-50c-33 0-61 15-71 35' fill='white'/%3E%3Ccircle cx='118' cy='112' r='10' fill='%23000'/%3E%3C/svg%3E" />
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <canvas id="gameCanvas"></canvas>
+  <header class="site" role="banner">
+    <div class="brand" aria-label="Game title">
+      <div class="logo" aria-hidden="true"></div>
+      <h1>Flappy <span class="accent">Clone</span></h1>
+    </div>
+
+    <div class="controls" role="toolbar" aria-label="Game controls">
+      <button class="btn ghost" id="btnHelp" type="button" aria-haspopup="dialog" aria-controls="panelReady">Help</button>
+      <button class="btn" id="btnMute" type="button" aria-pressed="false" title="Toggle sound">🔊 Sound</button>
+      <button class="btn primary" id="btnStart" type="button">▶ Start</button>
+    </div>
+  </header>
+
+  <main class="game-shell" role="main" aria-label="Game window">
+    <!-- Taustakerrokset (koristeelliset) -->
+    <div class="bg-layer bg-gradient" aria-hidden="true"></div>
+    <div class="bg-layer bg-clouds" aria-hidden="true"></div>
+    <div class="bg-layer bg-hills" aria-hidden="true"></div>
+
+    <!-- Canvas -->
+    <div class="canvas-wrap">
+      <!-- CSS-koko tulee style.css:stä; ui.js päivittää sisäisen resoluution -->
+      <canvas id="game" aria-label="Game canvas"></canvas>
+    </div>
+
+    <!-- HUD -->
+    <div class="hud" aria-live="polite">
+      <div class="score-badge">Score: <span id="score">0</span></div>
+    </div>
+
+    <!-- Overlays -->
+    <div class="overlay" id="panelReady" hidden>
+      <div class="panel" role="dialog" aria-modal="false">
+        <h2>Ready?</h2>
+        <p>Click / Space / Touch to flap</p>
+        <button class="btn primary" id="btnReady">Start</button>
+      </div>
+    </div>
+
+    <div class="overlay" id="panelGameOver" hidden>
+      <div class="panel" role="dialog" aria-modal="false">
+        <h2>Game Over</h2>
+        <p>Score: <strong id="finalScore">0</strong> — High score: <strong id="highScore">0</strong></p>
+        <div class="row">
+          <button class="btn" id="btnRestart">↻ Play again</button>
+          <button class="btn ghost" id="btnMenu">Menu</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobiilin “flap” -->
+    <button class="touch-flap" id="touchFlap" aria-hidden="true">FLAP</button>
+  </main>
+
+  <footer class="site" role="contentinfo">
+    <span>© 2025 Flappy Clone • HTML Canvas API • <span class="target">60 FPS</span> target</span>
+  </footer>
+
+  <!-- Entry point: ES-moduulit -->
   <script type="module" src="./js/main.js"></script>
 </body>
 </html>

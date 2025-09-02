@@ -1,3 +1,4 @@
+
 export class Bird {
   constructor() {
     this.x = 100;
@@ -27,4 +28,3 @@ export class Bird {
     ctx.fillStyle = "yellow";
     ctx.fillRect(this.x - 10, this.y - 10, 20, 20);
   }
-}

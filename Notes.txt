@@ -111,6 +111,9 @@ Description: Deploy the game.
 Title: [Release] Semver and changelog
 Description: v0.1 MVP, v1.0 stable.
 
+
+
+
 Flappy Bird Clone (HTML Canvas API)
 
 Goal:
