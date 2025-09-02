@@ -1,32 +1,32 @@
 
-// bird.js — bird model + physics
+
 export class Bird {
-  constructor(x, y){
-    this.x = x; this.y = y;
+  constructor() {
+    this.x = 100;
+    this.y = 300;
     this.vy = 0;
-    this.r = 14;
-    this.gravity = 1800;   // px/s^2
-    this.flapVel = -420;   // px/s
+    this.gravity = 0.8;
+    this.flapStrength = 10;
+    this.maxVy = 10;
   }
-  flap(){ this.vy = this.flapVel; }
-  update(dt){
-    this.vy += this.gravity * dt;
-    this.y  += this.vy * dt;
+
+  reset() {
+    this.y = 300;
+    this.vy = 0;
   }
-  draw(ctx){
-    ctx.save();
-    ctx.translate(this.x, this.y);
-    ctx.rotate(Math.atan2(this.vy, 400));
-    ctx.fillStyle = '#ffde59';
-    ctx.beginPath(); ctx.arc(0,0,this.r,0,Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#ff9f1c';
-    ctx.beginPath(); ctx.ellipse(this.r*0.7, 0, this.r*0.5, this.r*0.35, 0, 0, Math.PI*2); ctx.fill();
-    ctx.fillStyle = '#000';
-    ctx.beginPath(); ctx.arc(-this.r*0.2, -this.r*0.2, this.r*0.12, 0, Math.PI*2); ctx.fill();
-    ctx.restore();
+
+  flap() {
+    this.vy = -this.flapStrength;
   }
-  getBounds(){ return {x:this.x, y:this.y, r:this.r}; }
+
+  update(deltaTime) {
+    this.vy += this.gravity * deltaTime;
+    if (this.vy > this.maxVy) this.vy = this.maxVy;
+    this.y += this.vy * deltaTime;
+  }
+
+  draw(ctx) {
+    ctx.fillStyle = "yellow";
+    ctx.fillRect(this.x - 10, this.y - 10, 20, 20);
+  }
 }
-
-
-
