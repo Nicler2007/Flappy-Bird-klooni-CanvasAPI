@@ -1,4 +1,3 @@
-
 import { CANVAS_W, CANVAS_H, GameState, store } from "./game.js";
 import { Bird } from "./bird.js";
 import { Pipes } from "./pipes.js";
