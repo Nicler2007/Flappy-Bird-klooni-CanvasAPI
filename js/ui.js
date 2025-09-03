@@ -1,5 +1,7 @@
 /**
- * ui.js — GRAPHICS/UI MODULE (muokattu: High HUD luonti automaattisesti)
+ * ui.js — GRAPHICS/UI MODULE
+ * Päivitetty: Score + High keskitettynä samaan kapseliin (scoreboard)
+ * ja "Nollaa ennätys" -nappi, joka lähettää ui:resetHigh -tapahtuman.
  */
 
 const canvas = document.getElementById('game');
@@ -73,46 +75,36 @@ const btnRestart = document.getElementById('btnRestart');
 const btnMenu = document.getElementById('btnMenu');
 const btnHelp = document.getElementById('btnHelp');
 const btnMute = document.getElementById('btnMute');
+const btnResetHigh = document.getElementById('btnResetHigh');
 const touchFlap = document.getElementById('touchFlap');
 
-// HUD: varmista, että Score ja High ovat olemassa
+// HUD keskikapseli
 const hud = document.querySelector('.hud');
 let scoreEl = document.getElementById('score');
 let scoreHighEl = document.getElementById('scoreHigh');
-let hudHigh = document.getElementById('hudHigh');
 
 function ensureHud(){
   if (!hud) return;
 
-  // Jos HUD ei ole flexattu vasen-oikea, aseta se (turvallinen lisäys)
-  const style = hud.style;
-  if (!style.display) style.display = 'flex';
-  if (!style.alignItems) style.alignItems = 'center';
-  if (!style.justifyContent) style.justifyContent = 'space-between';
-  if (!style.padding) style.padding = '0 16px';
-  if (!style.left) hud.style.left = '0';
-  if (!style.right) hud.style.right = '0';
-  if (!style.top) hud.style.top = '10px';
-
-  // Score (vasen) — jos puuttuu, luodaan
-  if (!scoreEl){
-    const badge = document.createElement('div');
-    badge.className = 'score-badge';
-    badge.innerHTML = `Score: <span id="score">0</span>`;
-    hud.prepend(badge);
-    scoreEl = badge.querySelector('#score');
+  // Jos scoreboardia ei ole, luodaan se
+  let scoreboard = document.getElementById('scoreboard');
+  if (!scoreboard){
+    scoreboard = document.createElement('div');
+    scoreboard.id = 'scoreboard';
+    scoreboard.className = 'scoreboard';
+    scoreboard.setAttribute('role','status');
+    scoreboard.setAttribute('aria-atomic','true');
+    scoreboard.innerHTML = `
+      <span class="label">Score:</span> <span id="score">0</span>
+      <span class="sep">•</span>
+      <span class="label">High:</span> <span id="scoreHigh">0</span>
+    `;
+    hud.appendChild(scoreboard);
   }
 
-  // High (oikea) — jos puuttuu, luodaan
-  if (!scoreHighEl){
-    const badge = document.createElement('div');
-    badge.className = 'score-badge ghost';
-    badge.id = 'hudHigh';
-    badge.innerHTML = `High: <span id="scoreHigh">0</span>`;
-    hud.appendChild(badge);
-    scoreHighEl = badge.querySelector('#scoreHigh');
-    hudHigh = badge;
-  }
+  // Päivitä referenssit
+  if (!scoreEl) scoreEl = document.getElementById('score');
+  if (!scoreHighEl) scoreHighEl = document.getElementById('scoreHigh');
 }
 ensureHud();
 
@@ -149,6 +141,13 @@ btnMute?.addEventListener('click', ()=>{
   window.dispatchEvent(new CustomEvent('ui:muteToggle', { detail: { muted: !pressed } }));
 });
 
+// Nollaa ennätys -nappi
+btnResetHigh?.addEventListener('click', ()=>{
+  const ok = confirm('Nollataanko tallennettu ennätys?');
+  if (!ok) return;
+  window.dispatchEvent(new CustomEvent('ui:resetHigh'));
+});
+
 // Show mobile-only flap button on touch devices
 const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
 if(!isTouch) touchFlap?.setAttribute('hidden','');
@@ -165,7 +164,6 @@ window.UI = {
   setHighScore(value){
     if (!scoreHighEl) ensureHud();
     if (scoreHighEl) scoreHighEl.textContent = String(value|0);
-    if (hudHigh) hudHigh.hidden = false;
   },
   showReady(){ hide(panelGameOver); show(panelReady); },
   hideOverlays(){ hide(panelReady); hide(panelGameOver); },
