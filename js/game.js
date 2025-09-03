@@ -1,8 +1,8 @@
-// game.js — game loop, states, and pipes (muokattu: hitaampi tempo + HUD High Score)
+// game.js — game loop, states, and pipes (muokattu: hitaampi tempo + HUD High Score + reset high)
 import { UI } from './ui.js';
 import { Bird } from './bird.js';
 import { drawBackground } from './background.js';
-import { getHighScore, setHighScore } from './storage.js';
+import { getHighScore, setHighScore, clearHighScore } from './storage.js';
 import { play } from './audio.js';
 
 export class Game {
@@ -38,6 +38,12 @@ export class Game {
     window.addEventListener('ui:flap', ()=>{
       if(this.state==='playing'){ this.bird.flap(); play('flap'); }
     });
+    window.addEventListener('ui:resetHigh', ()=>{
+      clearHighScore();
+      this.highScore = 0;
+      UI.setHighScore(0);
+      // jos peli on käynnissä, jatka vain; muuten pysy tilassa
+    });
 
     // mouse/keyboard
     window.addEventListener('pointerdown', ()=>{
@@ -61,6 +67,7 @@ export class Game {
     this.spawnTimer = 0;
     UI.setScore(0);
     // Näytä HUDissa tämänhetkinen high score heti Ready-näytössä
+    this.highScore = getHighScore();
     UI.setHighScore(this.highScore);
     UI.showReady();
   }

@@ -1,6 +1,7 @@
 /**
  * ui.js — GRAPHICS/UI MODULE
- * Päivitetty: Score + High keskitettynä samaan kapseliin (scoreboard).
+ * Päivitetty: Score + High keskitettynä samaan kapseliin (scoreboard)
+ * ja "Nollaa ennätys" -nappi, joka lähettää ui:resetHigh -tapahtuman.
  */
 
 const canvas = document.getElementById('game');
@@ -74,6 +75,7 @@ const btnRestart = document.getElementById('btnRestart');
 const btnMenu = document.getElementById('btnMenu');
 const btnHelp = document.getElementById('btnHelp');
 const btnMute = document.getElementById('btnMute');
+const btnResetHigh = document.getElementById('btnResetHigh');
 const touchFlap = document.getElementById('touchFlap');
 
 // HUD keskikapseli
@@ -137,6 +139,13 @@ btnMute?.addEventListener('click', ()=>{
   btnMute.setAttribute('aria-pressed', String(!pressed));
   btnMute.textContent = pressed ? '🔊 Sound' : '🔇 Muted';
   window.dispatchEvent(new CustomEvent('ui:muteToggle', { detail: { muted: !pressed } }));
+});
+
+// Nollaa ennätys -nappi
+btnResetHigh?.addEventListener('click', ()=>{
+  const ok = confirm('Nollataanko tallennettu ennätys?');
+  if (!ok) return;
+  window.dispatchEvent(new CustomEvent('ui:resetHigh'));
 });
 
 // Show mobile-only flap button on touch devices
