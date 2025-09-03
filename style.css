@@ -21,7 +21,7 @@ html,body{ height:100%; margin:0; background:var(--bg); color:var(--fg); font-fa
 .canvas-wrap{ position:relative; display:grid; place-items:center; padding:0 1rem 1.25rem }
 
 canvas#game{
-  /* The VISIBLE size of the canvas; ui.js adjusts the internal resolution */
+  /* Canvasin NÄKYVÄ koko; ui.js säätää sisäisen resoluution */
   width:min(92vw, 640px);
   height:min(70vh, 480px);
   background:#0b1220;
@@ -29,7 +29,7 @@ canvas#game{
   box-shadow:0 10px 30px #0006;
 }
 
-/* Decorative backgrounds (optional) */
+/* Koristeelliset taustat (valinnaiset) */
 .bg-layer{ position:absolute; inset:0; pointer-events:none }
 .bg-gradient{ background:radial-gradient(80% 60% at 50% 20%, #073a53 0%, #0b1220 70%, transparent 100%) }
 .bg-clouds::after{ content:""; position:absolute; inset:auto 0 20% 0; height:20%; background:repeating-linear-gradient(90deg,#ffffff10 0 40px,transparent 40px 80px) }
@@ -44,7 +44,7 @@ canvas#game{
 .panel{ background:var(--panel); padding:20px 24px; border-radius:16px; box-shadow:0 10px 30px #0008; text-align:center; min-width:280px }
 .row{ display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap }
 
-/* Mobiles FLAP */
+/* Mobiilin FLAP */
 .touch-flap{
   position:absolute; inset:auto 1rem 1rem 1rem;
   height:56px; border-radius:14px; font-weight:900;
@@ -54,5 +54,5 @@ canvas#game{
 /* Footer */
 footer .target{ color:var(--accent-2) }
 
-/* General helpers */
+/* Yleiset apurit */
 [hidden]{ display:none !important }
