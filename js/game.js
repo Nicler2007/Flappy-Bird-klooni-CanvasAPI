@@ -3,7 +3,7 @@ import { UI } from './ui.js';
 import { Bird } from './bird.js';
 import { drawBackground } from './background.js';
 import { getHighScore, setHighScore } from './storage.js';
-import { play } from './audio.js';
+import { play, playMusic, stopMusic } from './audio.js';
 
 export class Game {
   constructor(){
@@ -54,15 +54,18 @@ export class Game {
     this.spawnTimer = 0;
     UI.setScore(0);
     UI.showReady();
+    stopMusic(); // varmistetaan, ettei musiikki soi menu-tilassa
   }
 
   start(){
     this.state = 'playing';
     UI.hideOverlays();
+    playMusic(); // aloita taustamusiikki pelin alussa
   }
 
   gameOver(){
     this.state = 'over';
+    stopMusic(); // pysäytä taustamusiikki pelin lopussa
     this.highScore = setHighScore(this.score);
     UI.showGameOver({ score: this.score, highScore: this.highScore });
     play('hit');
