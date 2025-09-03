@@ -24,7 +24,7 @@ export function play(name){
   try { a.currentTime = 0; a.play(); } catch {}
 }
 
-// listen for the toggle coming from the UI button
+// kuuntele UI:n napista tuleva toggle
 window.addEventListener('ui:muteToggle', (e)=>{
   setMuted(e.detail.muted);
 });
