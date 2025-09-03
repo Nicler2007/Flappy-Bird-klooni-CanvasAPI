@@ -54,18 +54,18 @@ export class Game {
     this.spawnTimer = 0;
     UI.setScore(0);
     UI.showReady();
-    stopMusic(); // varmistetaan, ettei musiikki soi menu-tilassa
+    stopMusic();
   }
 
   start(){
     this.state = 'playing';
     UI.hideOverlays();
-    playMusic(); // aloita taustamusiikki pelin alussa
+    playMusic();
   }
 
   gameOver(){
     this.state = 'over';
-    stopMusic(); // pysäytä taustamusiikki pelin lopussa
+    stopMusic();
     this.highScore = setHighScore(this.score);
     UI.showGameOver({ score: this.score, highScore: this.highScore });
     play('hit');

@@ -11,10 +11,6 @@ UI.setMuted(false);
 // start the game
 const game = initGame();
 
-// OPTIONAL: play background music immediately in menu
-// playMusic();  // voit ottaa käyttöön halutessasi
-
-// kuuntele UI:n mute-painiketta
 window.addEventListener('ui:muteToggle', (e)=>{
   const muted = e.detail.muted;
   if (muted) stopMusic();

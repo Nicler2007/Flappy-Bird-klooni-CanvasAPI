@@ -9,12 +9,11 @@ const sounds = {
   point:new Audio('./assets/sfx/point.wav'),
 };
 
-// Taustamusiikki
-const music = new Audio('./assets/music/backgroundmusic.mp3'); // <- vaihda tiedostonimi
-music.loop = true;      // pyörii loopissa
-music.volume = 0.5;     // voit säätää äänenvoimakkuutta
+// Background music
+const music = new Audio('./assets/music/backgroundmusic.mp3');
+music.loop = true;
+music.volume = 0.5;     // Volume
 
-// Lataa kaikki äänet valmiiksi
 for (const a of Object.values(sounds)) {
   a.preload = 'auto';
   a.volume = 0.8;
@@ -34,17 +33,17 @@ export function play(name){
   try { a.currentTime = 0; a.play(); } catch {}
 }
 
-// Taustamusiikin hallinta
+// Background music control
 export function playMusic(){
   if (!muted) {
-    music.currentTime = 0; // alkaa alusta
-    music.play().catch(() => {}); // estää virheet, jos ei voi toistaa
+    music.currentTime = 0;
+    music.play().catch(() => {});
   }
 }
 
 export function stopMusic(){
   music.pause();
-  music.currentTime = 0; // resetoi aloitukseen
+  music.currentTime = 0;
 }
 
 // kuuntele UI:n napista tuleva toggle
