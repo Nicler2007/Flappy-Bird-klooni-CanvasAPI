@@ -1,12 +1,9 @@
 /**
- * GRAPHICS/UI MODULE (no gameplay logic here)
- * - Handles canvas sizing, placeholder scene, and UI overlays/buttons.
- * - Exposes simple hooks (window.UI) and emits CustomEvents for the mechanics team.
+ * ui.js — GRAPHICS/UI MODULE (muokattu: High HUD luonti automaattisesti)
  */
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
-const scoreEl = document.getElementById('score');
 
 // ===== Canvas scaling (keeps crisp pixels on HiDPI) =====
 function resizeCanvas(){
@@ -78,6 +75,47 @@ const btnHelp = document.getElementById('btnHelp');
 const btnMute = document.getElementById('btnMute');
 const touchFlap = document.getElementById('touchFlap');
 
+// HUD: varmista, että Score ja High ovat olemassa
+const hud = document.querySelector('.hud');
+let scoreEl = document.getElementById('score');
+let scoreHighEl = document.getElementById('scoreHigh');
+let hudHigh = document.getElementById('hudHigh');
+
+function ensureHud(){
+  if (!hud) return;
+
+  // Jos HUD ei ole flexattu vasen-oikea, aseta se (turvallinen lisäys)
+  const style = hud.style;
+  if (!style.display) style.display = 'flex';
+  if (!style.alignItems) style.alignItems = 'center';
+  if (!style.justifyContent) style.justifyContent = 'space-between';
+  if (!style.padding) style.padding = '0 16px';
+  if (!style.left) hud.style.left = '0';
+  if (!style.right) hud.style.right = '0';
+  if (!style.top) hud.style.top = '10px';
+
+  // Score (vasen) — jos puuttuu, luodaan
+  if (!scoreEl){
+    const badge = document.createElement('div');
+    badge.className = 'score-badge';
+    badge.innerHTML = `Score: <span id="score">0</span>`;
+    hud.prepend(badge);
+    scoreEl = badge.querySelector('#score');
+  }
+
+  // High (oikea) — jos puuttuu, luodaan
+  if (!scoreHighEl){
+    const badge = document.createElement('div');
+    badge.className = 'score-badge ghost';
+    badge.id = 'hudHigh';
+    badge.innerHTML = `High: <span id="scoreHigh">0</span>`;
+    hud.appendChild(badge);
+    scoreHighEl = badge.querySelector('#scoreHigh');
+    hudHigh = badge;
+  }
+}
+ensureHud();
+
 function show(el){ el && (el.hidden = false); }
 function hide(el){ el && (el.hidden = true); }
 
@@ -120,17 +158,27 @@ touchFlap?.addEventListener('pointerdown', ()=>{
 
 // ===== Public UI API for the mechanics team =====
 window.UI = {
-  setScore(value){ scoreEl.textContent = String(value|0); },
+  setScore(value){
+    if (!scoreEl) ensureHud();
+    if (scoreEl) scoreEl.textContent = String(value|0);
+  },
+  setHighScore(value){
+    if (!scoreHighEl) ensureHud();
+    if (scoreHighEl) scoreHighEl.textContent = String(value|0);
+    if (hudHigh) hudHigh.hidden = false;
+  },
   showReady(){ hide(panelGameOver); show(panelReady); },
   hideOverlays(){ hide(panelReady); hide(panelGameOver); },
   showGameOver({ score = 0, highScore = 0 } = {}){
-    document.getElementById('finalScore').textContent = String(score|0);
-    document.getElementById('highScore').textContent = String(highScore|0);
+    const fs = document.getElementById('finalScore');
+    const hs = document.getElementById('highScore');
+    if (fs) fs.textContent = String(score|0);
+    if (hs) hs.textContent = String(highScore|0);
     hide(panelReady); show(panelGameOver);
   },
   setMuted(muted){
-    btnMute.setAttribute('aria-pressed', String(!!muted));
-    btnMute.textContent = muted ? '🔇 Muted' : '🔊 Sound';
+    btnMute?.setAttribute('aria-pressed', String(!!muted));
+    if (btnMute) btnMute.textContent = muted ? '🔇 Muted' : '🔊 Sound';
   },
   getCanvas(){ return canvas; },
   getContext(){ return ctx; },

@@ -1,4 +1,4 @@
-// game.js — game loop, states, and pipes
+// game.js — game loop, states, and pipes (muokattu: hitaampi tempo + HUD High Score)
 import { UI } from './ui.js';
 import { Bird } from './bird.js';
 import { drawBackground } from './background.js';
@@ -13,16 +13,19 @@ export class Game {
     this.h = this.canvas.height;
 
     this.state = 'menu'; // menu -> ready -> playing -> over
-    this.score = 0; this.highScore = getHighScore();
+    this.score = 0;
+    this.highScore = getHighScore();
     this.time = 0;
 
     this.bird = new Bird(this.w*0.3, this.h*0.5);
     this.last = performance.now();
 
-    this.pipeGap = 160;
-    this.pipeSpeed = 220;   // px/s
+    // — Hitaampi ja helpompi moodi —
+    this.pipeGap = 180;     // was 160
+    this.pipeSpeed = 150;   // was 220
+    this.spawnEvery = 1.8;  // was 1.4
+
     this.pipes = [];        // {x, topH, scored}
-    this.spawnEvery = 1.4;  // s
     this.spawnTimer = 0;
 
     // UI events
@@ -32,10 +35,14 @@ export class Game {
     window.addEventListener('ui:menuStart', ()=>{ this.toReady(); });
     window.addEventListener('ui:readyConfirm', ()=>{ this.start(); });
     window.addEventListener('ui:restart', ()=>{ this.toReady(); });
-    window.addEventListener('ui:flap', ()=>{ if(this.state==='playing'){ this.bird.flap(); play('flap'); }});
+    window.addEventListener('ui:flap', ()=>{
+      if(this.state==='playing'){ this.bird.flap(); play('flap'); }
+    });
 
     // mouse/keyboard
-    window.addEventListener('pointerdown', ()=>{ if(this.state==='playing'){ this.bird.flap(); play('flap'); }});
+    window.addEventListener('pointerdown', ()=>{
+      if(this.state==='playing'){ this.bird.flap(); play('flap'); }
+    });
     window.addEventListener('keydown', (e)=>{
       if (e.code === 'Space') {
         if (this.state==='playing'){ this.bird.flap(); play('flap'); }
@@ -53,6 +60,8 @@ export class Game {
     this.pipes = [];
     this.spawnTimer = 0;
     UI.setScore(0);
+    // Näytä HUDissa tämänhetkinen high score heti Ready-näytössä
+    UI.setHighScore(this.highScore);
     UI.showReady();
   }
 
@@ -63,7 +72,10 @@ export class Game {
 
   gameOver(){
     this.state = 'over';
+    // Tallennus localStorageen — palauttaa päivitetyn high scoren
     this.highScore = setHighScore(this.score);
+    // Päivitä HUD myös tallennuksen jälkeen
+    UI.setHighScore(this.highScore);
     UI.showGameOver({ score: this.score, highScore: this.highScore });
     play('hit');
   }
@@ -106,6 +118,12 @@ export class Game {
         p.scored = true;
         this.score++;
         UI.setScore(this.score);
+
+        // Live-ennätysnäyttö (ei tallennusta vielä)
+        if (this.score > this.highScore){
+          this.highScore = this.score;
+          UI.setHighScore(this.highScore);
+        }
         play('point');
       }
     }
