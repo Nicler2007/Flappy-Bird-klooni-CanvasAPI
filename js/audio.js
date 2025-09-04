@@ -8,7 +8,8 @@ const sounds = {
   flap: new Audio('./audio/flap.mp3'),
   point: new Audio('./audio/point.mp3'),
   game_over: new Audio('./audio/game_over.mp3'),
-  btn: new Audio('/audio/button-click.mp3')
+  btn: new Audio('./audio/button-click.mp3'),
+  new_record: new Audio('./audio/new-record.mp3'),
 
 };
 
