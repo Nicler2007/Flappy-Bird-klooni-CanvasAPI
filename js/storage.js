@@ -1,14 +1,31 @@
 
-// storage.js — high score recovery
-const KEY = 'flappy.highscore';
+// storage.js — high score persistence in localStorage
+const KEY = 'flappy_highscore';
 
 export function getHighScore(){
-  const v = localStorage.getItem(KEY);
-  return v ? parseInt(v,10) : 0;
+  try {
+    const raw = localStorage.getItem(KEY);
+    const v = parseInt(raw || '0', 10);
+    return Number.isFinite(v) && v > 0 ? v : 0;
+  } catch {
+    return 0;
+  }
 }
 
 export function setHighScore(score){
-  const hs = getHighScore();
-  if (score > hs) localStorage.setItem(KEY, String(score));
-  return getHighScore();
+  try {
+    const current = getHighScore();
+    const next = Math.max(current, (score|0));
+    localStorage.setItem(KEY, String(next));
+    return next;
+  } catch {
+    return getHighScore();
+  }
+}
+
+export function clearHighScore(){
+  try {
+    localStorage.removeItem(KEY);
+  } catch {}
+  return 0;
 }

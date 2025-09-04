@@ -1,13 +1,13 @@
 
-// background
+// background.js — very simple sky/ground background
 
 // Simple background drawing; expand to parallax/sprites later.
 export function drawBackground(ctx, w, h, t){
-  // Sky
+  // sky
   ctx.fillStyle = '#87CEEB';
   ctx.fillRect(0,0,w,h);
-  // horizon
+  // horizon/ground
   ctx.fillStyle = '#7ec850';
   ctx.fillRect(0, h*0.85, w, h*0.15);
-  // you can add clouds etc. based on time 't'
+  // TODO: add clouds etc. based on time 't'
 }

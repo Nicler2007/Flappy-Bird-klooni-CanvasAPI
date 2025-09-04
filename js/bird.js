@@ -5,8 +5,8 @@ export class Bird {
     this.x = x; this.y = y;
     this.vy = 0;
     this.r = 14;
-    this.gravity = 1800;   // px/s^2
-    this.flapVel = -420;   // px/s
+    this.gravity = 1200;   // was 1800
+    this.flapVel = -360;   // was -420
   }
   flap(){ this.vy = this.flapVel; }
   update(dt){
@@ -27,4 +27,5 @@ export class Bird {
   }
   getBounds(){ return {x:this.x, y:this.y, r:this.r}; }
 }
+
 
