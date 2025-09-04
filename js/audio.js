@@ -5,9 +5,11 @@ let muted = false;
 
 // SFX
 const sounds = {
-  flap: new Audio('./assets/sfx/flap.wav'),
-  hit:  new Audio('./assets/sfx/hit.wav'),
-  point:new Audio('./assets/sfx/point.wav'),
+  flap: new Audio('./audio/flap.mp3'),
+  point: new Audio('./audio/point.mp3'),
+  game_over: new Audio('./audio/game_over.mp3'),
+  btn: new Audio('/audio/button-click.mp3')
+
 };
 
 // Background music
