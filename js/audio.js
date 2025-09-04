@@ -10,7 +10,7 @@ const sounds = {
 };
 
 // Background music
-const music = new Audio('.audio/backgroundmusic.mp3');
+const music = new Audio('.audio/backgroundmusic.mp3'); //***Location has been chance in the files***
 music.loop = true;
 music.volume = 0.5;     // Volume
 
