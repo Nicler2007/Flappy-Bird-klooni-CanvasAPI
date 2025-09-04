@@ -2,7 +2,7 @@
 // audio.js — sounds, music and muting
 let muted = false;
 
-// SFX-äänet
+// SFX
 const sounds = {
   flap: new Audio('./assets/sfx/flap.wav'),
   hit:  new Audio('./assets/sfx/hit.wav'),
@@ -10,9 +10,9 @@ const sounds = {
 };
 
 // Background music
-const music = new Audio('.audio/backgroundmusic.mp3'); //***Location has been chance in the files***
+const music = new Audio('./audio/backgroundmusic.mp3'); // path changed earlier in files
 music.loop = true;
-music.volume = 0.5;     // Volume
+music.volume = 0.5; // volume
 
 for (const a of Object.values(sounds)) {
   a.preload = 'auto';
@@ -20,7 +20,7 @@ for (const a of Object.values(sounds)) {
 }
 music.preload = 'auto';
 
-// --- Exportoidut funktiot ---
+// --- exports ---
 export function setMuted(v){
   muted = !!v;
   if (muted) music.pause();
@@ -46,8 +46,7 @@ export function stopMusic(){
   music.currentTime = 0;
 }
 
-// kuuntele UI:n napista tuleva toggle
+// listen to UI toggle
 window.addEventListener('ui:muteToggle', (e)=>{
   setMuted(e.detail.muted);
 });
-

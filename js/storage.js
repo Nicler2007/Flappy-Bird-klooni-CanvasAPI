@@ -1,5 +1,5 @@
-// storage.js — high score -tallennus localStorageen
 
+// storage.js — high score persistence in localStorage
 const KEY = 'flappy_highscore';
 
 export function getHighScore(){

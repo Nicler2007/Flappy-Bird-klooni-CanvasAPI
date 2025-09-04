@@ -1,4 +1,5 @@
-// game.js — game loop, states, and pipes (muokattu: hitaampi tempo + HUD High Score + reset high)
+
+// game.js — game loop, states, and pipes (slower tempo + live high-score HUD)
 import { UI } from './ui.js';
 import { Bird } from './bird.js';
 import { drawBackground } from './background.js';
@@ -20,7 +21,7 @@ export class Game {
     this.bird = new Bird(this.w*0.3, this.h*0.5);
     this.last = performance.now();
 
-    // — Hitaampi ja helpompi moodi —
+    // Easier pacing
     this.pipeGap = 180;     // was 160
     this.pipeSpeed = 150;   // was 220
     this.spawnEvery = 1.8;  // was 1.4
@@ -42,7 +43,7 @@ export class Game {
       clearHighScore();
       this.highScore = 0;
       UI.setHighScore(0);
-      // jos peli on käynnissä, jatka vain; muuten pysy tilassa
+      // if the game is running, just continue; otherwise remain in current state
     });
 
     // mouse/keyboard
@@ -66,7 +67,7 @@ export class Game {
     this.pipes = [];
     this.spawnTimer = 0;
     UI.setScore(0);
-    // Näytä HUDissa tämänhetkinen high score heti Ready-näytössä
+    // Show current high score already on Ready screen
     this.highScore = getHighScore();
     UI.setHighScore(this.highScore);
     UI.showReady();
@@ -79,9 +80,9 @@ export class Game {
 
   gameOver(){
     this.state = 'over';
-    // Tallennus localStorageen — palauttaa päivitetyn high scoren
+    // Persist to localStorage — returns updated high score
     this.highScore = setHighScore(this.score);
-    // Päivitä HUD myös tallennuksen jälkeen
+    // Update HUD as well
     UI.setHighScore(this.highScore);
     UI.showGameOver({ score: this.score, highScore: this.highScore });
     play('hit');
@@ -111,7 +112,7 @@ export class Game {
     const b = this.bird.getBounds();
     if (b.y + b.r > this.h*0.85 || b.y - b.r < 0) return this.gameOver();
 
-    // pipe collisions + points
+    // pipes: collisions + points
     for (const p of this.pipes){
       const pipeW = 80;
       const gapY1 = p.topH;
@@ -126,7 +127,7 @@ export class Game {
         this.score++;
         UI.setScore(this.score);
 
-        // Live-ennätysnäyttö (ei tallennusta vielä)
+        // live high score (no persistence yet)
         if (this.score > this.highScore){
           this.highScore = this.score;
           UI.setHighScore(this.highScore);
@@ -169,3 +170,4 @@ export function initGame(){
   g.toReady();
   return g;
 }
+
