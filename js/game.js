@@ -1,3 +1,4 @@
+
 // game.js — game loop, states, and pipes
 import { UI } from './ui.js';
 import { Bird } from './bird.js';
