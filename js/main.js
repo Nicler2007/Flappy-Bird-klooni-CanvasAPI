@@ -1,21 +1,25 @@
 
 // main.js — application entry point
-import './ui.js';                 // initialize window.UI and overlays
+import './ui.js'; // initialize window.UI and overlays
 import { UI } from './ui.js';
 import { initGame } from './game.js';
 import { setMuted, playMusic, stopMusic } from './audio.js';
 
-// initialize the sound button UI state 
+// Initialize the sound button UI state
 setMuted(false);
 UI.setMuted(false);
 
-// start the game
+// Create the (single) game instance
 const game = initGame();
 
-window.addEventListener('ui:muteToggle', (e)=>{
-  const muted = e.detail.muted;
-  if (muted) stopMusic();
-  else if (game.state === 'playing') playMusic();
+// Sync background music with mute state and gameplay
+window.addEventListener('ui:muteToggle', (e) => {
+  const isMuted = !!e.detail.muted;
+  if (isMuted) {
+    stopMusic();
+  } else if (game && game.state === 'playing') {
+    playMusic();
+  }
 });
 
-initGame();
+
