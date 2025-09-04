@@ -1,8 +1,5 @@
 :root{
   --bg:#0f172a; --fg:#e2e8f0; --panel:#111827; --accent:#00c2ff; --accent-2:#0ea5e9;
-  /* legacy HUD vars kept in case you want them later */
-  --hud-bg:#4b7381;
-  --hud-fg:#0b1220;
 }
 
 *{ box-sizing:border-box }
@@ -24,7 +21,7 @@ html,body{ height:100%; margin:0; background:var(--bg); color:var(--fg); font-fa
 .canvas-wrap{ position:relative; display:grid; place-items:center; padding:0 1rem 1.25rem }
 
 canvas#game{
-  /* Visible canvas size; ui.js adjusts internal resolution (DPR-aware) */
+  /* Canvasin NÄKYVÄ koko; ui.js säätää sisäisen resoluution */
   width:min(92vw, 640px);
   height:min(70vh, 480px);
   background:#0b1220;
@@ -32,34 +29,22 @@ canvas#game{
   box-shadow:0 10px 30px #0006;
 }
 
-/* Decorative backgrounds (optional) */
+/* Koristeelliset taustat (valinnaiset) */
 .bg-layer{ position:absolute; inset:0; pointer-events:none }
 .bg-gradient{ background:radial-gradient(80% 60% at 50% 20%, #073a53 0%, #0b1220 70%, transparent 100%) }
 .bg-clouds::after{ content:""; position:absolute; inset:auto 0 20% 0; height:20%; background:repeating-linear-gradient(90deg,#ffffff10 0 40px,transparent 40px 80px) }
 .bg-hills::after{ content:""; position:absolute; inset:auto 0 0 0; height:18%; background:linear-gradient(#164e63,#083344) }
 
-/* HUD: text-only at the top center (no bubble) */
-.hud{
-  position:absolute; top:10px; left:0; right:0;
-  display:grid; place-items:center;
-  padding:0 16px;
-  pointer-events:none; /* never block clicks on the canvas */
-  z-index: 5;
-}
-.score-badge{
-  font-weight:800;
-  font-size:1rem;
-  line-height:1;
-  color:#e6f3f9;
-  text-shadow:0 2px 6px rgba(0,0,0,.45);
-}
+/* HUD */
+.hud{ position:absolute; top:10px; left:50%; transform:translateX(-50%); }
+.score-badge{ background:var(--accent-2); color:#0b1220; border-radius:999px; padding:.25rem .65rem; font-weight:800 }
 
 /* Overlays */
 .overlay{ position:absolute; inset:0; display:grid; place-items:center; background:#00000070 }
 .panel{ background:var(--panel); padding:20px 24px; border-radius:16px; box-shadow:0 10px 30px #0008; text-align:center; min-width:280px }
 .row{ display:flex; gap:.5rem; justify-content:center; flex-wrap:wrap }
 
-/* Mobile FLAP button */
+/* Mobiilin FLAP */
 .touch-flap{
   position:absolute; inset:auto 1rem 1rem 1rem;
   height:56px; border-radius:14px; font-weight:900;
@@ -69,4 +54,5 @@ canvas#game{
 /* Footer */
 footer .target{ color:var(--accent-2) }
 
-/* Helper*
+/* Yleiset apurit */
+[hidden]{ display:none !important }

@@ -1,10 +1,9 @@
-
-// game.js — game loop, states, and pipes (slower tempo + live high-score HUD)
+// game.js — game loop, states, and pipes
 import { UI } from './ui.js';
 import { Bird } from './bird.js';
 import { drawBackground } from './background.js';
-import { getHighScore, setHighScore, clearHighScore } from './storage.js';
-import { play } from './audio.js';
+import { getHighScore, setHighScore } from './storage.js';
+import { play, playMusic, stopMusic } from './audio.js';
 
 export class Game {
   constructor(){
@@ -14,19 +13,16 @@ export class Game {
     this.h = this.canvas.height;
 
     this.state = 'menu'; // menu -> ready -> playing -> over
-    this.score = 0;
-    this.highScore = getHighScore();
+    this.score = 0; this.highScore = getHighScore();
     this.time = 0;
 
     this.bird = new Bird(this.w*0.3, this.h*0.5);
     this.last = performance.now();
 
-    // Easier pacing
-    this.pipeGap = 180;     // was 160
-    this.pipeSpeed = 150;   // was 220
-    this.spawnEvery = 1.8;  // was 1.4
-
+    this.pipeGap = 160;
+    this.pipeSpeed = 220;   // px/s
     this.pipes = [];        // {x, topH, scored}
+    this.spawnEvery = 1.4;  // s
     this.spawnTimer = 0;
 
     // UI events
@@ -36,20 +32,10 @@ export class Game {
     window.addEventListener('ui:menuStart', ()=>{ this.toReady(); });
     window.addEventListener('ui:readyConfirm', ()=>{ this.start(); });
     window.addEventListener('ui:restart', ()=>{ this.toReady(); });
-    window.addEventListener('ui:flap', ()=>{
-      if(this.state==='playing'){ this.bird.flap(); play('flap'); }
-    });
-    window.addEventListener('ui:resetHigh', ()=>{
-      clearHighScore();
-      this.highScore = 0;
-      UI.setHighScore(0);
-      // if the game is running, just continue; otherwise remain in current state
-    });
+    window.addEventListener('ui:flap', ()=>{ if(this.state==='playing'){ this.bird.flap(); play('flap'); }});
 
     // mouse/keyboard
-    window.addEventListener('pointerdown', ()=>{
-      if(this.state==='playing'){ this.bird.flap(); play('flap'); }
-    });
+    window.addEventListener('pointerdown', ()=>{ if(this.state==='playing'){ this.bird.flap(); play('flap'); }});
     window.addEventListener('keydown', (e)=>{
       if (e.code === 'Space') {
         if (this.state==='playing'){ this.bird.flap(); play('flap'); }
@@ -67,23 +53,20 @@ export class Game {
     this.pipes = [];
     this.spawnTimer = 0;
     UI.setScore(0);
-    // Show current high score already on Ready screen
-    this.highScore = getHighScore();
-    UI.setHighScore(this.highScore);
     UI.showReady();
+    stopMusic();
   }
 
   start(){
     this.state = 'playing';
     UI.hideOverlays();
+    playMusic();
   }
 
   gameOver(){
     this.state = 'over';
-    // Persist to localStorage — returns updated high score
+    stopMusic();
     this.highScore = setHighScore(this.score);
-    // Update HUD as well
-    UI.setHighScore(this.highScore);
     UI.showGameOver({ score: this.score, highScore: this.highScore });
     play('hit');
   }
@@ -112,7 +95,7 @@ export class Game {
     const b = this.bird.getBounds();
     if (b.y + b.r > this.h*0.85 || b.y - b.r < 0) return this.gameOver();
 
-    // pipes: collisions + points
+    // pipe collisions + points
     for (const p of this.pipes){
       const pipeW = 80;
       const gapY1 = p.topH;
@@ -126,12 +109,6 @@ export class Game {
         p.scored = true;
         this.score++;
         UI.setScore(this.score);
-
-        // live high score (no persistence yet)
-        if (this.score > this.highScore){
-          this.highScore = this.score;
-          UI.setHighScore(this.highScore);
-        }
         play('point');
       }
     }
@@ -170,4 +147,3 @@ export function initGame(){
   g.toReady();
   return g;
 }
-

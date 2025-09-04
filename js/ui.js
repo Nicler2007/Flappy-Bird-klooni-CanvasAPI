@@ -1,14 +1,14 @@
 /**
- * ui.js — GRAPHICS / UI MODULE
- * - Removed the top score "bubble"; HUD uses the existing text in HTML.
- * - Safer score element lookup.
- * - Robust start flow (buttons + Space/canvas fallback in Ready state).
+ * GRAPHICS/UI MODULE (no gameplay logic here)
+ * - Handles canvas sizing, placeholder scene, and UI overlays/buttons.
+ * - Exposes simple hooks (window.UI) and emits CustomEvents for the mechanics team.
  */
 
 const canvas = document.getElementById('game');
 const ctx = canvas.getContext('2d');
+const scoreEl = document.getElementById('score');
 
-// ===== Canvas scaling (HiDPI crispness) =====
+// ===== Canvas scaling (keeps crisp pixels on HiDPI) =====
 function resizeCanvas(){
   const dpr = Math.max(1, Math.min(window.devicePixelRatio || 1, 2));
   const rect = canvas.getBoundingClientRect();
@@ -19,19 +19,22 @@ function resizeCanvas(){
   }
   ctx.imageSmoothingEnabled = false;
   drawPlaceholder();
+  // Notify mechanics that the canvas size changed
   window.dispatchEvent(new CustomEvent('ui:resize', { detail: { width: w, height: h, dpr } }));
 }
 
-// ===== Placeholder splash art =====
+// ===== Placeholder splash art (until real sprites/parallax are integrated) =====
 function drawPlaceholder(){
   const w = canvas.width, h = canvas.height;
   ctx.clearRect(0,0,w,h);
+  // border lines
   ctx.globalAlpha = .35;
   for(let i=0;i<6;i++){
     ctx.strokeStyle = i%2 ? '#ffffff22' : '#00e5ff22';
     ctx.lineWidth = 2; ctx.strokeRect(12+i*3, 12+i*3, w-24-i*6, h-24-i*6);
   }
   ctx.globalAlpha = 1;
+  // title
   ctx.font = `${Math.floor(h*0.06)}px Impact, system-ui, sans-serif`;
   ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
   const gradient = ctx.createLinearGradient(0,0,0,h*.3);
@@ -40,12 +43,28 @@ function drawPlaceholder(){
   ctx.shadowColor = '#00e5ff'; ctx.shadowBlur = 24;
   ctx.fillText('FLAPPY CLONE', w/2, h*0.28);
   ctx.shadowBlur = 0;
+  // hint
   ctx.font = `${Math.floor(h*0.03)}px system-ui, sans-serif`;
   ctx.fillStyle = '#ffffffaa';
   ctx.fillText('Click / Space / Touch to flap', w/2, h*0.36);
+  // bird icon
+  const r = Math.max(10, Math.floor(h*0.018));
+  const cx = w*0.34, cy = h*0.55;
+  ctx.save();
+  ctx.translate(cx, cy);
+  ctx.rotate(Math.sin(Date.now()/250)*0.1);
+  ctx.fillStyle = '#ffde59';
+  ctx.beginPath(); ctx.arc(0,0,r,0,Math.PI*2); ctx.fill();
+  ctx.fillStyle = '#ff9f1c'; ctx.beginPath(); ctx.ellipse(r*.7, 0, r*.5, r*.35, 0, 0, Math.PI*2); ctx.fill(); // beak
+  ctx.fillStyle = '#000'; ctx.beginPath(); ctx.arc(-r*.2, -r*.2, r*.12, 0, Math.PI*2); ctx.fill(); // eye
+  ctx.restore();
+  // pipe icon
+  const px = w*0.58, py = h*0.55, pw = r*2.2, ph = r*4.2;
+  ctx.fillStyle = '#2ecc71'; ctx.fillRect(px, py, pw, ph);
+  ctx.fillStyle = '#27ae60'; ctx.fillRect(px-6, py-8, pw+12, 12);
 }
 
-window.addEventListener('resize', resizeCanvas, { passive: true });
+window.addEventListener('resize', resizeCanvas, {passive:true});
 resizeCanvas();
 
 // ===== UI elements and events =====
@@ -57,43 +76,32 @@ const btnRestart = document.getElementById('btnRestart');
 const btnMenu = document.getElementById('btnMenu');
 const btnHelp = document.getElementById('btnHelp');
 const btnMute = document.getElementById('btnMute');
-const btnResetHigh = document.getElementById('btnResetHigh');
 const touchFlap = document.getElementById('touchFlap');
 
-// HUD: get #score safely (works with or without wrappers)
-const scoreEl =
-  document.querySelector('.score-badge #score') ||
-  document.getElementById('score');
+function show(el){ el && (el.hidden = false); }
+function hide(el){ el && (el.hidden = true); }
 
-function show(el){ if(el) el.hidden = false; }
-function hide(el){ if(el) el.hidden = true; }
-
-// ===== Controls -> game events =====
+// TEAM HOOKS: UI -> Mechanics via CustomEvents
 btnStart?.addEventListener('click', ()=>{
-  hide(panelGameOver);
-  show(panelReady);
+  hide(panelGameOver); show(panelReady);
   window.dispatchEvent(new CustomEvent('ui:menuStart'));
 });
-
 btnReady?.addEventListener('click', ()=>{
   hide(panelReady);
   window.dispatchEvent(new CustomEvent('ui:readyConfirm'));
 });
-
 btnRestart?.addEventListener('click', ()=>{
-  hide(panelGameOver);
-  show(panelReady);
+  hide(panelGameOver); show(panelReady);
   window.dispatchEvent(new CustomEvent('ui:restart'));
 });
-
 btnMenu?.addEventListener('click', ()=>{
-  hide(panelGameOver);
-  show(panelReady);
+  hide(panelGameOver); show(panelReady);
   window.dispatchEvent(new CustomEvent('ui:menu'));
 });
 
 btnHelp?.addEventListener('click', ()=>{
-  alert('Controls: Click / Space / Touch to flap. Avoid pipes and survive as long as you can.');
+  const msg = 'Controls: Click / Space / Touch to flap. Avoid pipes and survive as long as you can.';
+  alert(msg); // lightweight placeholder
 });
 
 btnMute?.addEventListener('click', ()=>{
@@ -103,61 +111,33 @@ btnMute?.addEventListener('click', ()=>{
   window.dispatchEvent(new CustomEvent('ui:muteToggle', { detail: { muted: !pressed } }));
 });
 
-btnResetHigh?.addEventListener('click', ()=>{
-  if (!confirm('Reset saved high score?')) return;
-  window.dispatchEvent(new CustomEvent('ui:resetHigh'));
-});
-
-// Touch-only FLAP button
+// Show mobile-only flap button on touch devices
 const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;
-if (!isTouch) touchFlap?.setAttribute('hidden','');
+if(!isTouch) touchFlap?.setAttribute('hidden','');
 touchFlap?.addEventListener('pointerdown', ()=>{
   window.dispatchEvent(new CustomEvent('ui:flap'));
 });
 
-// Fallbacks: start from READY also with Space or canvas click
-window.addEventListener('keydown', (e)=>{
-  if (e.code === 'Space' && !panelReady.hidden) {
-    hide(panelReady);
-    window.dispatchEvent(new CustomEvent('ui:readyConfirm'));
-    e.preventDefault();
-  }
-});
-
-canvas.addEventListener('pointerdown', ()=>{
-  if (!panelReady.hidden) {
-    hide(panelReady);
-    window.dispatchEvent(new CustomEvent('ui:readyConfirm'));
-  } else {
-    // If already playing, forward flap
-    window.dispatchEvent(new CustomEvent('ui:flap'));
-  }
-});
-
-// ===== Public API =====
+// ===== Public UI API for the mechanics team =====
 window.UI = {
-  setScore(value){
-    if (scoreEl) scoreEl.textContent = String(value|0);
-  },
-  setHighScore(_v){ /* no-op: not displayed on HUD */ },
+  setScore(value){ scoreEl.textContent = String(value|0); },
   showReady(){ hide(panelGameOver); show(panelReady); },
   hideOverlays(){ hide(panelReady); hide(panelGameOver); },
   showGameOver({ score = 0, highScore = 0 } = {}){
-    const fs = document.getElementById('finalScore');
-    const hs = document.getElementById('highScore');
-    if (fs) fs.textContent = String(score|0);
-    if (hs) hs.textContent = String(highScore|0);
+    document.getElementById('finalScore').textContent = String(score|0);
+    document.getElementById('highScore').textContent = String(highScore|0);
     hide(panelReady); show(panelGameOver);
   },
   setMuted(muted){
-    btnMute?.setAttribute('aria-pressed', String(!!muted));
-    if (btnMute) btnMute.textContent = muted ? '🔇 Muted' : '🔊 Sound';
+    btnMute.setAttribute('aria-pressed', String(!!muted));
+    btnMute.textContent = muted ? '🔇 Muted' : '🔊 Sound';
   },
   getCanvas(){ return canvas; },
   getContext(){ return ctx; },
 };
 
-// Show Ready on load (game.js will also call UI.showReady() via toReady)
+// Initial state
 show(panelReady);
 
+// export viite muille moduuleille
 export const UI = window.UI;
