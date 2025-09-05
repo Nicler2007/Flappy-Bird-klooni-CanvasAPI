@@ -17,11 +17,48 @@ html,body{ height:100%; margin:0; background:var(--bg); color:var(--fg); font-fa
 .btn.primary{ background:var(--accent) }
 .btn:disabled{ opacity:.6; cursor:not-allowed }
 
+/* Slider tyylit */
+.btn.slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width:120px;
+  height:32px;
+  border-radius:999px;
+  background:var(--accent-2);
+  cursor:pointer;
+  vertical-align:middle;
+  margin:0 4px;
+}
+
+.btn.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width:20px;
+  height:32px;
+  background:#0b1220;
+  border-radius:999px;
+  cursor:pointer;
+}
+
+.btn.slider::-moz-range-thumb {
+  width:20px;
+  height:32px;
+  background:#0b1220;
+  border-radius:999px;
+  cursor:pointer;
+}
+
+/* Sliderin label */
+.slider-label{
+  margin:0 4px;
+  vertical-align:middle;
+  font-weight:700;
+  color:#0b1220;
+}
+
 .game-shell{ position:relative; display:grid; place-items:center; min-height:70vh }
 .canvas-wrap{ position:relative; display:grid; place-items:center; padding:0 1rem 1.25rem }
 
 canvas#game{
-  /* Canvasin NÄKYVÄ koko; ui.js säätää sisäisen resoluution */
   width:min(92vw, 640px);
   height:min(70vh, 480px);
   background:#0b1220;
