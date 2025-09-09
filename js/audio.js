@@ -5,13 +5,17 @@ let muted = false;
 
 // SFX
 const sounds = {
-  flap: new Audio('./assets/sfx/flap.wav'),
-  hit:  new Audio('./assets/sfx/hit.wav'),
-  point:new Audio('./assets/sfx/point.wav'),
+  flap: new Audio('./audio/flap.mp3'),
+  point: new Audio('./audio/point.mp3'),
+  game_over: new Audio('./audio/game_over.mp3'),
+  btn: new Audio('./audio/button-click.mp3'),
+  new_record: new Audio('./audio/new-record.mp3'),
+
 };
 
 // Background music
 const music = new Audio('./audio/backgroundmusic1.mp3'); // path changed earlier in files
+
 music.loop = true;
 music.volume = 0.5;     // Volume
 

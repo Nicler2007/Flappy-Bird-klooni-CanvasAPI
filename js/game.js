@@ -1,3 +1,4 @@
+
 // game.js — game loop, states, and pipes
 import { UI } from './ui.js';
 import { Bird } from './bird.js';
@@ -13,12 +14,14 @@ export class Game {
     this.h = this.canvas.height;
 
     this.state = 'menu'; // menu -> ready -> playing -> over
-    this.score = 0; this.highScore = getHighScore();
+    this.score = 0;
+    this.highScore = getHighScore();
     this.time = 0;
 
-    this.bird = new Bird(this.w*0.3, this.h*0.5);
+    this.bird = new Bird(this.w * 0.3, this.h * 0.5);
     this.last = performance.now();
 
+    // Pacing
     this.pipeGap = 160;
     this.pipeSpeed = 220;   // px/s
     this.pipes = [];        // {x, topH, scored}
@@ -26,19 +29,24 @@ export class Game {
     this.spawnTimer = 0;
 
     // UI events
-    window.addEventListener('ui:resize', (e)=>{
-      this.w = e.detail.width; this.h = e.detail.height;
+    window.addEventListener('ui:resize', (e) => {
+      this.w = e.detail.width;
+      this.h = e.detail.height;
     });
-    window.addEventListener('ui:menuStart', ()=>{ this.toReady(); });
-    window.addEventListener('ui:readyConfirm', ()=>{ this.start(); });
-    window.addEventListener('ui:restart', ()=>{ this.toReady(); });
-    window.addEventListener('ui:flap', ()=>{ if(this.state==='playing'){ this.bird.flap(); play('flap'); }});
+    window.addEventListener('ui:menuStart', () => { this.toReady(); });
+    window.addEventListener('ui:readyConfirm', () => { this.start(); });
+    window.addEventListener('ui:restart', () => { this.toReady(); });
+    window.addEventListener('ui:flap', () => {
+      if (this.state === 'playing') { this.bird.flap(); play('flap'); }
+    });
 
-    // mouse/keyboard
-    window.addEventListener('pointerdown', ()=>{ if(this.state==='playing'){ this.bird.flap(); play('flap'); }});
-    window.addEventListener('keydown', (e)=>{
+    // Mouse/keyboard
+    window.addEventListener('pointerdown', () => {
+      if (this.state === 'playing') { this.bird.flap(); play('flap'); }
+    });
+    window.addEventListener('keydown', (e) => {
       if (e.code === 'Space') {
-        if (this.state==='playing'){ this.bird.flap(); play('flap'); }
+        if (this.state === 'playing') { this.bird.flap(); play('flap'); }
         e.preventDefault();
       }
     });
@@ -49,7 +57,7 @@ export class Game {
   toReady(){
     this.state = 'ready';
     this.score = 0;
-    this.bird = new Bird(this.w*0.3, this.h*0.5);
+    this.bird = new Bird(this.w * 0.3, this.h * 0.5);
     this.pipes = [];
     this.spawnTimer = 0;
     UI.setScore(0);
@@ -74,37 +82,43 @@ export class Game {
   spawnPipe(){
     const minTop = 60;
     const maxTop = this.h - this.pipeGap - 160;
-    const topH = Math.max(minTop, Math.min(maxTop, Math.random()*maxTop));
-    this.pipes.push({ x: this.w + 40, topH, scored:false });
+    const topH = Math.max(minTop, Math.min(maxTop, Math.random() * maxTop));
+    this.pipes.push({ x: this.w + 40, topH, scored: false });
   }
 
   update(dt){
     if (this.state !== 'playing') return;
 
+    // Spawn pipes
     this.spawnTimer += dt;
     if (this.spawnTimer >= this.spawnEvery){
-      this.spawnTimer = 0; this.spawnPipe();
+      this.spawnTimer = 0;
+      this.spawnPipe();
     }
 
+    // Move pipes and cull off-screen
     for (const p of this.pipes) p.x -= this.pipeSpeed * dt;
     this.pipes = this.pipes.filter(p => p.x > -120);
 
+    // Bird physics
     this.bird.update(dt);
 
-    // ground/ceiling
+    // Ground/ceiling
     const b = this.bird.getBounds();
-    if (b.y + b.r > this.h*0.85 || b.y - b.r < 0) return this.gameOver();
+    if (b.y + b.r > this.h * 0.85 || b.y - b.r < 0) return this.gameOver();
 
-    // pipe collisions + points
+    // Pipes: collisions + points
     for (const p of this.pipes){
       const pipeW = 80;
       const gapY1 = p.topH;
       const gapY2 = p.topH + this.pipeGap;
+
       const withinX = (b.x + b.r > p.x) && (b.x - b.r < p.x + pipeW);
       const hitTop = withinX && (b.y - b.r < gapY1);
       const hitBot = withinX && (b.y + b.r > gapY2);
       if (hitTop || hitBot) return this.gameOver();
 
+      // Scoring when the bird has fully passed the pipe
       if (!p.scored && p.x + pipeW < b.x - b.r){
         p.scored = true;
         this.score++;
@@ -118,20 +132,20 @@ export class Game {
     const ctx = this.ctx, w = this.w, h = this.h;
     drawBackground(ctx, w, h);
 
-    // pipes
+    // Pipes
     ctx.fillStyle = '#2ecc71';
     for (const p of this.pipes){
       const pipeW = 80;
       ctx.fillRect(p.x, 0, pipeW, p.topH);
-      ctx.fillRect(p.x, p.topH + this.pipeGap, pipeW, h*0.85 - (p.topH + this.pipeGap));
+      ctx.fillRect(p.x, p.topH + this.pipeGap, pipeW, h * 0.85 - (p.topH + this.pipeGap));
     }
 
-    // bird
+    // Bird
     this.bird.draw(ctx);
   }
 
   loop(now){
-    const dt = Math.min(0.033, (now - this.last)/1000);
+    const dt = Math.min(0.033, (now - this.last) / 1000);
     this.last = now;
     this.time += dt;
 
@@ -142,8 +156,12 @@ export class Game {
   }
 }
 
+// ---------- Singleton guard ----------
+let _gameInstance = null;
+
 export function initGame(){
-  const g = new Game();
-  g.toReady();
-  return g;
+  if (_gameInstance) return _gameInstance;
+  _gameInstance = new Game();
+  _gameInstance.toReady();
+  return _gameInstance;
 }
