@@ -18,29 +18,29 @@
     <div class="controls" role="toolbar" aria-label="Game controls">
       <button class="btn ghost" id="btnHelp" type="button" aria-haspopup="dialog" aria-controls="panelReady">Help</button>
       <button class="btn" id="btnMute" type="button" aria-pressed="false" title="Toggle sound">🔊 Sound</button>
+
+      <!--Volume slider-->
+      <label for="volumeSlider" class="btn slider-label">Volume:</label>
+      <input id="volumeSlider" type="range" min="0" max="100" value="80" class="btn slider">
+
       <button class="btn ghost" id="btnResetHigh" type="button" title="Reset saved high score">🗑️ Reset high score</button>
       <button class="btn primary" id="btnStart" type="button">▶ Start</button>
     </div>
   </header>
 
   <main class="game-shell" role="main" aria-label="Game window">
-    <!-- Decorative background layers -->
     <div class="bg-layer bg-gradient" aria-hidden="true"></div>
     <div class="bg-layer bg-clouds" aria-hidden="true"></div>
     <div class="bg-layer bg-hills" aria-hidden="true"></div>
 
-    <!-- Canvas -->
     <div class="canvas-wrap">
-      <!-- The visible size comes from style.css; ui.js updates internal resolution -->
       <canvas id="game" aria-label="Game canvas"></canvas>
     </div>
 
-    <!-- HUD (text-only now; no overlay bubble) -->
     <div class="hud" aria-live="polite">
       <div class="score-badge">Score: <span id="score">0</span></div>
     </div>
 
-    <!-- Overlays -->
     <div class="overlay" id="panelReady" hidden>
       <div class="panel" role="dialog" aria-modal="false">
         <h2>Ready?</h2>
@@ -60,7 +60,6 @@
       </div>
     </div>
 
-    <!-- Mobile “flap” button -->
     <button class="touch-flap" id="touchFlap" aria-hidden="true">FLAP</button>
   </main>
 
@@ -68,7 +67,6 @@
     <span>© 2025 Flappy Clone • HTML Canvas API • <span class="target">60 FPS</span> target</span>
   </footer>
 
-  <!-- Entry point: ES modules -->
   <script type="module" src="./js/main.js"></script>
 </body>
 </html>
