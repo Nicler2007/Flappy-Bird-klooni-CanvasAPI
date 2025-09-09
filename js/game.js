@@ -1,9 +1,8 @@
-
 // game.js — game loop, states, and pipes
 import { UI } from './ui.js';
 import { Bird } from './bird.js';
 import { drawBackground } from './background.js';
-import { getHighScore, setHighScore } from './storage.js';
+import { getHighScore, setHighScore, resetHighScore } from './storage.js';
 import { play, playMusic, stopMusic } from './audio.js';
 
 export class Game {
@@ -38,6 +37,17 @@ export class Game {
     window.addEventListener('ui:restart', () => { this.toReady(); });
     window.addEventListener('ui:flap', () => {
       if (this.state === 'playing') { this.bird.flap(); play('flap'); }
+    });
+
+    // ✨ High score reset from UI
+    window.addEventListener('ui:resetHigh', () => {
+      resetHighScore();
+      this.highScore = 0;
+
+      // Jos Game Over -paneeli on näkyvissä, päivitä se heti
+      if (this.state === 'over') {
+        UI.showGameOver({ score: this.score, highScore: 0 });
+      }
     });
 
     // Mouse/keyboard

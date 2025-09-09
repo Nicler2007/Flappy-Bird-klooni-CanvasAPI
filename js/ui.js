@@ -98,6 +98,7 @@ const btnHelp = document.getElementById('btnHelp');
 const btnMute = document.getElementById('btnMute');
 const touchFlap = document.getElementById('touchFlap');
 const volumeSlider = document.getElementById('volumeSlider');
+const btnResetHigh = document.getElementById('btnResetHigh');
 
 function show(el) {
   el && (el.hidden = false);
@@ -144,6 +145,14 @@ volumeSlider?.addEventListener('input', () => {
   const value = volumeSlider.value / 100; // scale 0–100 -> 0–1
   window.dispatchEvent(new CustomEvent('ui:volumeChange', { detail: { volume: value } }));
 });
+
+
+btnResetHigh?.addEventListener('click', () => {
+  const ok = confirm('Reset saved high score?');
+  if (!ok) return;
+  window.dispatchEvent(new CustomEvent('ui:resetHigh'));
+});
+
 
 // Show mobile-only flap button on touch devices
 const isTouch = matchMedia('(hover: none), (pointer: coarse)').matches;

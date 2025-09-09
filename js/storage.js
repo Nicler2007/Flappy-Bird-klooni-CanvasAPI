@@ -23,9 +23,7 @@ export function setHighScore(score){
   }
 }
 
-export function clearHighScore(){
-  try {
-    localStorage.removeItem(KEY);
-  } catch {}
+export function resetHighScore(){
+  localStorage.removeItem(KEY);
   return 0;
 }
