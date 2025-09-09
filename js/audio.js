@@ -13,8 +13,7 @@ const sounds = {
 
 // Background music
 const music = new Audio('./audio/backgroundmusic1.mp3'); // path changed earlier in files
-music.loop = true;
-music.volume = 0.2; // default volume
+
 
 for (const a of Object.values(sounds)) {
   a.preload = 'auto';
